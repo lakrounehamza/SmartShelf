@@ -38,7 +38,10 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        //
+        dd($client);
+        $valid = $request->validate();
+        $client->update($valid);
+        return response()->json(['message' => 'le client est modifie','id'=> $client->id], 200);
     }
 
     /**
@@ -46,6 +49,7 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        //
+        $client->delete();
+        return response()->json(['message' => 'le client  est suprime','id'=> $client->id], 204);
     }
 }
