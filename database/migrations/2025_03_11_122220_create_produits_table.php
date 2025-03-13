@@ -20,9 +20,7 @@ return new class extends Migration
             $table->integer('quantite')->unsigned(); 
             $table->integer('id_rayon')->unsigned();
             $table->foreign('id_rayon')->references('id')->on('rayons');
-            $table->timestamps();
-
-            
+            $table->timestamps();  
         });
     }
 

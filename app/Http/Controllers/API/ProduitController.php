@@ -7,6 +7,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Produit;
+use Illuminate\Support\Facades\Route;
 
 class ProduitController extends Controller
 {
@@ -26,7 +27,16 @@ class ProduitController extends Controller
      */
     public function store(Request $request)
     {
-        //
+    
+        $validatedData = $request->validate([
+            'nom' => 'required',
+            'promotion' => 'required',
+            'prix' => 'required',
+            'quantite' => 'required', 
+            'id_rayon' => 'required',
+        ]);
+        $produit = Produit::create($validatedData);
+        return response()->json(['message' => 'le produit est cree','id'=> $produit->id], 201);
     }
 
     /**
@@ -42,13 +52,13 @@ class ProduitController extends Controller
      */
     public function update(Request $request, Produit $produit)
     {
+      
         $validatedData = $request->validate([
-            'nom' => 'required',
-            'prix' => 'required',
-            'promotion' => 'required',
-            'quantite' => 'required',
-            'rayon_id' => 'required',
-            'vonder_id' => 'required',
+            'nom' => 'nullable',
+            'promotion' => 'nullable',
+            'prix' => 'nullable',
+            'quantite' => 'nullable', 
+            'rayon_id' => 'nullable',
         ]);
         $produit->update($validatedData);
         return response()->json(['message' => 'le produit est modifie','id'=> $produit->id], 200);
@@ -61,5 +71,17 @@ class ProduitController extends Controller
     {
         $produit->delete();
         return response()->json(['message' => 'le produit  est suprime','id'=> $produit->id], 204);
+    }
+    public function consuler(Request $request)
+    {
+        $produits = Produit::join('rayons','rayons.id','=','produits.id_rayon')->where('rayons.titre', 'like', '%'.$request->nom.'%')->get();
+        return response()->json($produits);
+    }
+    public function  search(Request $request ){
+        $produits = Produit::join('rayons','rayons.id','=','produits.id_rayon')->where('produits.nom','=',$request->nom)->where('rayons.titre', 'like', '%'.$request->titre.'%')->first();
+        if($produits == null)
+        return  response()->json('!!!!!');
+        return  response()->json($produits);
+
     }
 }
