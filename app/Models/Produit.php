@@ -11,4 +11,8 @@ class Produit extends Model
     {
         return $this->belongsTo(Rayon::class);
     }
+    public function vonder()
+    {
+        return $this->hasOne(Vonder::class);
+    }
 }

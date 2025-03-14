@@ -12,4 +12,8 @@ class Rayon extends Model
     {
         return $this->hasMany(Produit::class);
     }
+    public function vonders()
+    {
+        return $this->hasMany(Vonder::class);
+    }
 }

@@ -14,22 +14,21 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 // Route::apiResource('profiles', API\ProfileController');
-Route::apiResource('clients', ClientController::class);
-Route::apiResource('users', UserController::class);
-Route::apiResource('rayons',RayonController::class);
-Route::apiResource('vonders',VonderController::class);
-Route::apiResource('produits', ProduitController::class);
-Route::middleware(['auth', 'role:admin'])->group(function () {
+// Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::apiResource('clients', ClientController::class);
     Route::apiResource('users', UserController::class);
     Route::apiResource('rayons',RayonController::class);
     Route::apiResource('vonders',VonderController::class);
     Route::apiResource('produits', ProduitController::class);
-});
-Route::middleware(['auth', 'role:client'])->group(function () {
+    Route::get('produits/{id}/tchik',[ProduitController::class,'tchik']);
+    Route::get('tchikProduits',[ProduitController::class,'tchikProduit']);
+// });
+
+// Route::middleware(['auth:sanctum', 'role:client'])->group(function () {
     Route::get('rayons/{titre}/produits', [ProduitController::class, 'consuler']);
     Route::get('rayons/{titre}/produits/{nom}', [ProduitController::class, 'search']);
-});
+// });
+
 Route::post('register',[UserAuthController::class,'register']);
 Route::post('login',[UserAuthController::class,'login']);
 Route::post('logout',[UserAuthController::class,'logout'])->middleware('auth:sanctum');

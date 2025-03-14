@@ -6,6 +6,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use App\Models\Vonder;
 
 class VonderController extends Controller
 {
@@ -14,7 +15,9 @@ class VonderController extends Controller
      */
     public function index()
     {
-        //
+        $vonder  = Vonder::all();
+        return  response()->json([$vonder]);
+
     }
 
     /**
@@ -30,38 +33,33 @@ class VonderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $valid = $request->validate([
+            'id_produit' => 'required',  
+            'id_rayon' => 'required'
+        ]);
+        $vonder = Vonder::create($valid);
+        return response()->json(['message' => 'le vonder est cree', 'id' => $vonder->id], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Vonder $vonder)
     {
-        //
+        return response()->json($vonder);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+   
+    public function update(Request $request, Vonder $vonder)
     {
-        //
+        $vonder->update($request->all());
+        return response()->json(['message' => 'le vonder est modifie'], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+   
+    public function destroy(Vonder $vonder)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $vonder->delete();
+        return response()->json(['message' => 'le vonder est supprime'], 200);
     }
 }
